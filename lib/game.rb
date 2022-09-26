@@ -74,4 +74,16 @@ class Game
       return if [row_position, column_position] == finish
     end
   end
+
+  def print_path(node, moves = 0)
+    if node.parent.nil?
+      puts "You made it in #{moves} move#{"s" if moves > 1}! Here's your path: "
+      p node.position
+      puts ''
+      return
+    end
+    print_path(node.parent, moves += 1)
+    p node.position
+    puts ''
+  end
 end
