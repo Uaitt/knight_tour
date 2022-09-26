@@ -46,4 +46,16 @@ class Game
 
     print_path(finish_position_node)
   end
+
+  def create_knight_positions_tree(finish)
+    nodes_queue = []
+    nodes_queue.push(@knight.root)
+    @board[0][0] = 1
+    loop do
+      node = nodes_queue.shift
+      add_children_to_node(node, nodes_queue, finish)
+      break if nodes_queue[nodes_queue.length - 1].position == finish
+    end
+    nodes_queue[nodes_queue.length - 1]
+  end
 end
