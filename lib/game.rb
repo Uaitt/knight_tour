@@ -22,7 +22,7 @@ class Game
       input = gets.chomp.split(',').map(&:to_i)
       return input if input.length == 2
 
-      puts 'A position is made up of 2 coordinates! Try again'
+      puts 'Invalid position, try again!'
     end
   end
 
