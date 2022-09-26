@@ -36,7 +36,7 @@ class Game
     add_root_node_to_queue
     add_nodes_to_tree
 
-    nodes_queue[nodes_queue.length - 1]
+    #nodes_queue[nodes_queue.length - 1]
   end
 
   def add_root_node_to_queue
@@ -48,11 +48,23 @@ class Game
     loop do
       node = @nodes_queue.shift
       add_children_to_node(node)
+
       break if nodes_queue[-1].position == @finish_position
     end
   end
 
-  def add_children_to_node(node, nodes_queue, finish)
+  def add_children_to_node(node)
+    child = 0
+    while child < 8
+      calculate_current_position(node)
+      add_node if position_valid?
+
+      break if current_node_finish_node?
+      child += 1
+    end
+  end
+
+  def add_children_to_node(node)
     child = 0
     while child < 8
       row_position = node.position[0] + @knight.possible_moves[child][0]
