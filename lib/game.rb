@@ -49,7 +49,7 @@ class Game
       node = @nodes_queue.shift
       add_children_to_node(node)
 
-      break if nodes_queue[-1].position == @finish_position
+      break if @nodes_queue[-1].position == @finish_position
     end
   end
 
@@ -59,7 +59,7 @@ class Game
       calculate_current_position(node, child)
       add_child(node) if position_valid?
 
-      break if current_node_finish_node?
+      break if @current_position = @finish_position
       child += 1
     end
   end
@@ -75,25 +75,9 @@ class Game
   end
 
   def add_child(node)
-    new_node = TreeNode.new([@current_position[0], @current_position[1], node)
+    new_node = TreeNode.new([@current_position, node)
     node.next_nodes << new_node
     add_node_to_queue(new_node)
-  end
-
-  def add_children_to_node(node)
-    child = 0
-    while child < 8
-      row_position = node.position[0] + @knight.possible_moves[child][0]
-      column_position = node.position[1] + @knight.possible_moves[child][1]
-      if (0..7).member?(row_position) && (0..7).member?(column_position) && @board[row_position][column_position].zero?
-        new_node = TreeNode.new([row_position, column_position], node)
-        node.next_nodes << new_node
-        nodes_queue << new_node
-        @board[row_position][column_position] = 1
-      end
-      child += 1
-      return if [row_position, column_position] == finish
-    end
   end
 
   def print_path(node, moves = 0)
