@@ -4,4 +4,4 @@ require_relative 'game'
 require_relative 'knight'
 require_relative 'tree_node'
 
-Game.new
+Game.new.start_game

@@ -19,11 +19,10 @@ class Game
     puts "Enter the #{time} position (a,b) of the knight: "
     loop do
       input = gets.chomp.split(',').map(&:to_i)
-      break if input.length == 2
+      return input if input.length == 2
 
       puts 'A position is made up of 2 coordinates! Try again'
     end
-    input
   end
 
   def play_game(finish)
