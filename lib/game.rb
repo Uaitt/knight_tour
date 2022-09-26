@@ -7,12 +7,12 @@ class Game
   end
 
   def start_game
-    start = user_input('start')
-    finish = user_input('finish')
+    start_position = user_input('start')
+    finish_position = user_input('finish')
 
-    @knight = Knight.new(start)
+    @knight = Knight.new(start_position)
 
-    play_game(finish)
+    play_game(finish_position)
   end
 
   def user_input(time)
