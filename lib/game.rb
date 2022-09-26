@@ -58,4 +58,20 @@ class Game
     end
     nodes_queue[nodes_queue.length - 1]
   end
+
+  def add_children_to_node(node, nodes_queue, finish)
+    child = 0
+    while child < 8
+      row_position = node.position[0] + @knight.possible_moves[child][0]
+      column_position = node.position[1] + @knight.possible_moves[child][1]
+      if (0..7).member?(row_position) && (0..7).member?(column_position) && @board[row_position][column_position].zero?
+        new_node = TreeNode.new([row_position, column_position], node)
+        node.next_nodes << new_node
+        nodes_queue << new_node
+        @board[row_position][column_position] = 1
+      end
+      child += 1
+      return if [row_position, column_position] == finish
+    end
+  end
 end
