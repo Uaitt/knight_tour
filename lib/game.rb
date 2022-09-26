@@ -17,13 +17,17 @@ class Game
   end
 
   def user_input(time)
-    puts "Enter the #{time} position (a,b) of the knight: "
+    puts "Enter the #{time} position (a,b) of the knight.\nA coordinate must be a number between 0 and 7. "
     loop do
-      input = gets.chomp.split(',').map(&:to_i)
-      return input if input.length == 2
+      input = gets.chomp.split(',')
+      return input.map(&:to_i) if input_valid?(input)
 
       puts 'Invalid position, try again!'
     end
+  end
+
+  def input_valid?(input)
+    input.length == 2 && ('0'..'7').member?(input[0]) && ('0'..'7').member?(input[1])
   end
 
   def play_game
