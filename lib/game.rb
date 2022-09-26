@@ -4,13 +4,14 @@
 class Game
   def initialize
     @board = Array.new(8) { Array.new(8, 0) }
+    @knight = Knight.new
   end
 
   def start_game
     start_position = user_input('start')
     finish_position = user_input('finish')
 
-    @knight = Knight.new(start_position)
+    @knight.create_tree_root(start_position)
 
     play_game(finish_position)
   end

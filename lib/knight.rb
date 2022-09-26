@@ -6,6 +6,9 @@ class Knight
 
   def initialize(input)
     @possible_moves = [[1, 2], [1, -2], [-1, 2], [-1, -2], [2, 1], [2, -1], [-2, 1], [-2, -1]]
-    @root = TreeNode.new(input)
+  end
+
+  def create_tree_root(start_position)
+    @root = TreeNode.new(start_position)
   end
 end
