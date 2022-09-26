@@ -56,12 +56,17 @@ class Game
   def add_children_to_node(node)
     child = 0
     while child < 8
-      calculate_current_position(node)
-      add_node if position_valid?
+      calculate_current_position(node, child)
+      add_child if position_valid?
 
       break if current_node_finish_node?
       child += 1
     end
+  end
+
+  def calculate_current_position(node, child)
+    @row_position = node.position[0] + @knight.possible_moves[child][0]
+    @column_position = node.position[1] + @knight.possible_moves[child][1]
   end
 
   def add_children_to_node(node)
