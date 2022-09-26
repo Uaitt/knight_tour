@@ -26,8 +26,8 @@ class Game
     end
   end
 
-  def play_game(finish)
-    finish_position_node = create_knight_positions_tree(finish)
+  def play_game(finish_position)
+    finish_position_node = create_knight_positions_tree(finish_position)
 
     print_path(finish_position_node)
   end
