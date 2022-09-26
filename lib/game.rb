@@ -4,41 +4,26 @@
 class Game
   def initialize
     @board = Array.new(8) { Array.new(8, 0) }
+  end
 
-    start = ask_for_start
-    finish = ask_for_finish
+  def start_game
+    start = user_input('start')
+    finish = user_input('finish')
 
     @knight = Knight.new(start)
 
     play_game(finish)
   end
 
-  def ask_for_start
-    user_input = false
-    until user_input
-      puts 'Enter the starting position of the knight (a,b format): '
-      start = gets.chomp.split(',').map(&:to_i)
-      if start.length != 2
-        puts 'A position is made up of 2 cordinates! Try again.'
-      else
-        user_input = true
-      end
-    end
-    start
-  end
+  def user_input(time)
+    puts "Enter the #{time} position (a,b) of the knight: "
+    loop do
+      input = gets.chomp.split(',').map(&:to_i)
+      break if input.length == 2
 
-  def ask_for_finish
-    user_input = false
-    until user_input
-      puts 'Enter the ending position of the knight (a,b format): '
-      finish = gets.chomp.split(',').map(&:to_i)
-      if finish.length != 2
-        puts 'A position is made up of 2 cordinates! Try again.'
-      else
-        user_input = true
-      end
+      puts 'A position is made up of 2 coordinates! Try again'
     end
-    finish
+    input
   end
 
   def play_game(finish)
