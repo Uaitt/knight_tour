@@ -40,4 +40,10 @@ class Game
     end
     finish
   end
+
+  def play_game(finish)
+    finish_position_node = create_knight_positions_tree(finish)
+
+    print_path(finish_position_node)
+  end
 end
