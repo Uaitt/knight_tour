@@ -33,15 +33,15 @@ class Game
   end
 
   def create_positions_tree
-    add_root_node_to_queue
+    add_node_to_queue(@knight.root)
     add_nodes_to_tree
 
     #nodes_queue[nodes_queue.length - 1]
   end
 
-  def add_root_node_to_queue
-    @nodes_queue.push(@knight.root)
-    @board[0][0] = 1
+  def add_node_to_queue(node)
+    @nodes_queue << node
+    @board[@row_position][@column_position] = 1
   end
 
   def add_nodes_to_tree
@@ -57,7 +57,7 @@ class Game
     child = 0
     while child < 8
       calculate_current_position(node, child)
-      add_child if position_valid?
+      add_child(node) if position_valid?
 
       break if current_node_finish_node?
       child += 1
@@ -71,6 +71,12 @@ class Game
 
   def position_valid?
     (0..7).member?(@row_position) && (0..7).member?(@column_position) && @board[row_position][column_position].zero?
+  end
+
+  def add_child(node)
+    new_node = TreeNode.new([@row_position, @column_position], node)
+    node.next_nodes << new_node
+    add_node_to_queue(new_node)
   end
 
   def add_children_to_node(node)
