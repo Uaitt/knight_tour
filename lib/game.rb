@@ -69,6 +69,10 @@ class Game
     @column_position = node.position[1] + @knight.possible_moves[child][1]
   end
 
+  def position_valid?
+    (0..7).member?(@row_position) && (0..7).member?(@column_position) && @board[row_position][column_position].zero?
+  end
+
   def add_children_to_node(node)
     child = 0
     while child < 8
