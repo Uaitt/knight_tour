@@ -4,7 +4,7 @@
 class Knight
   attr_reader :possible_moves, :root
 
-  def initialize(input)
+  def initialize
     @possible_moves = [[1, 2], [1, -2], [-1, 2], [-1, -2], [2, 1], [2, -1], [-2, 1], [-2, -1]]
   end
 

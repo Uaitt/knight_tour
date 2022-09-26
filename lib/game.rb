@@ -9,12 +9,11 @@ class Game
   end
 
   def start_game
-    start_position = user_input('start')
-    finish_position = user_input('finish')
+    @start_position = user_input('start')
+    @finish_position = user_input('finish')
 
-    @knight.create_tree_root(start_position)
-
-    play_game(finish_position)
+    @knight.create_tree_root(@start_position)
+    play_game
   end
 
   def user_input(time)
@@ -35,7 +34,7 @@ class Game
 
   def create_positions_tree(finish_position)
     add_root_node_to_queue
-    add_nodes_to_tree
+    add_nodes_to_tree(finish_position)
 
     nodes_queue[nodes_queue.length - 1]
   end
@@ -47,8 +46,8 @@ class Game
 
   def add_nodes_to_tree
     loop do
-      node = nodes_queue.shift
-      add_children_to_node(node, nodes_queue, finish)
+      node = @nodes_queue.shift
+      add_children_to_node(node, finish)
       break if nodes_queue[nodes_queue.length - 1].position == finish
     end
   end
