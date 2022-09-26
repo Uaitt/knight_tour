@@ -26,15 +26,15 @@ class Game
     end
   end
 
-  def play_game(finish_position)
-    finish_position_node = create_positions_tree(finish_position)
+  def play_game
+    finish_position_node = create_positions_tree
 
     print_path(finish_position_node)
   end
 
-  def create_positions_tree(finish_position)
+  def create_positions_tree
     add_root_node_to_queue
-    add_nodes_to_tree(finish_position)
+    add_nodes_to_tree
 
     nodes_queue[nodes_queue.length - 1]
   end
@@ -47,8 +47,8 @@ class Game
   def add_nodes_to_tree
     loop do
       node = @nodes_queue.shift
-      add_children_to_node(node, finish)
-      break if nodes_queue[nodes_queue.length - 1].position == finish
+      add_children_to_node(node)
+      break if nodes_queue[-1].position == @finish_position
     end
   end
 
