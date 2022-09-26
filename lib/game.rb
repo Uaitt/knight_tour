@@ -5,6 +5,7 @@ class Game
   def initialize
     @board = Array.new(8) { Array.new(8, 0) }
     @knight = Knight.new
+    @nodes_queue = []
   end
 
   def start_game
@@ -27,21 +28,29 @@ class Game
   end
 
   def play_game(finish_position)
-    finish_position_node = create_knight_positions_tree(finish_position)
+    finish_position_node = create_positions_tree(finish_position)
 
     print_path(finish_position_node)
   end
 
-  def create_knight_positions_tree(finish)
-    nodes_queue = []
-    nodes_queue.push(@knight.root)
+  def create_positions_tree(finish_position)
+    add_root_node_to_queue
+    add_nodes_to_tree
+
+    nodes_queue[nodes_queue.length - 1]
+  end
+
+  def add_root_node_to_queue
+    @nodes_queue.push(@knight.root)
     @board[0][0] = 1
+  end
+
+  def add_nodes_to_tree
     loop do
       node = nodes_queue.shift
       add_children_to_node(node, nodes_queue, finish)
       break if nodes_queue[nodes_queue.length - 1].position == finish
     end
-    nodes_queue[nodes_queue.length - 1]
   end
 
   def add_children_to_node(node, nodes_queue, finish)
