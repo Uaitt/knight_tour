@@ -290,5 +290,30 @@ describe Game do
       end
     end
   end
+
+  describe '#manage_child' do
+    let(:node) { double(TreeNode) }
+    before do
+      allow(game).to receive(:calculate_current_position)
+      allow(game).to receive(:add_child)
+    end
+    context 'when position is valid' do
+      it 'adds the current node as child in the tree' do
+        allow(game).to receive(:position_valid?).and_return(true)
+        expect(game).to receive(:add_child)
+        child_number = 0
+        game.manage_child(node, child_number)
+      end
+    end
+
+    context 'when position is invalid' do
+      it 'does not add the current node as child in the tree' do
+        allow(game).to receive(:position_valid?).and_return(false)
+        expect(game).not_to receive(:add_child)
+        child_number = 1
+        game.manage_child(node, child_number)
+      end
+    end
+  end
 end
 
