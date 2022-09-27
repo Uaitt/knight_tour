@@ -315,5 +315,27 @@ describe Game do
       end
     end
   end
+
+  describe '#calculate_current_position' do
+    let(:node) { double(TreeNode) }
+    let(:knight) { game.instance_variable_get(:@knight) }
+    let(:child) { 1 }
+    before do
+      allow(node).to receive(:position).and_return([0, 0])
+      allow(knight).to receive(:possible_moves).and_return([1, 2])
+    end
+
+    context 'when called' do
+      it 'sends the position message on a node' do
+        expect(node).to receive(:position).twice
+        game.calculate_current_position(node, child)
+      end
+
+      it 'sends the possible_moves message on a knight' do
+        expect(knight).to receive(:possible_moves).twice
+        game.calculate_current_position(node, child)
+      end
+    end
+  end
 end
 
