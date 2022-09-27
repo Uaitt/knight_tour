@@ -51,7 +51,7 @@ class Game
     end
   end
 
-  def add_children_to_node(node)
+  def add_children_to_node(node) # looping script method, test the behavior (when it breaks)
     child_number = 0
     while child_number < 8
       calculate_current_position(node, child_number)

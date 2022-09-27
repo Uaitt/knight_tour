@@ -241,7 +241,7 @@ describe Game do
 
     context 'when @finish_position is a grandson of root' do
       let(:child_node) { double(TreeNode, position: [1, 2])}
-      let(:grandson_node) { double(TreeNode, position: [2,4 ])}
+      let(:grandson_node) { double(TreeNode, position: [2, 4])}
       before do
         allow(nodes_queue).to receive(:shift).and_return(root_node, child_node)
         allow(game).to receive(:add_children_to_node).with(root_node) { nodes_queue << child_node}
@@ -250,6 +250,24 @@ describe Game do
       end
 
       it 'stops the loop after two iterations' do
+        expect(game).to receive(:add_children_to_node).twice
+        game.add_nodes_to_tree
+      end
+    end
+
+    context 'when @finish_position is a great grandson of root' do
+      let(:child_node) { double(TreeNode, position: [1, 2]) }
+      let(:grandson_node) { double(TreeNode, position: [2, 4]) }
+      let(:great_grandson_node) { double(TreeNode, position: [3, 3]) }
+      before do
+        allow(nodes_queue).to receive(:shift).and_return(root_node, child_node, grandson_node)
+        allow(game).to receive(:add_children_to_node).with(root_node) { nodes_queue << child_node }
+        allow(game).to receive(:add_children_to_node).with(child_node) { nodes_queue << grandson_node }
+        allow(game).to receive(:add_children_to_node).with(grandson_node) { nodes_queue << great_grandson_node }
+        game.instance_variable_set(:@finish_position, [2, 4])
+      end
+
+      it 'stops the loop after three iterations' do
         expect(game).to receive(:add_children_to_node).twice
         game.add_nodes_to_tree
       end
