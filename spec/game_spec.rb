@@ -337,5 +337,34 @@ describe Game do
       end
     end
   end
+
+  describe '#position_valid?' do
+    let(:board) { game.instance_variable_get(:@board) }
+
+    context 'when given a valid cell and it is not already occupied' do
+      it 'is a valid position' do
+      game.instance_variable_set(:@current_position, [1, 2])
+      board = game.instance_variable_get(:@board)
+      board[1][2] = 0
+      expect(game).to be_position_valid
+      end
+    end
+
+    context 'when given an invalid cell' do
+      it 'is not a valid position' do
+        game.instance_variable_set(:@current_position, [-1, 2])
+        expect(game).not_to be_position_valid
+      end
+    end
+
+    context 'when given a valid cell but it is already occupied' do
+      it 'is not a valid position' do
+        game.instance_variable_set(:@current_position, [3, 4])
+        board = game.instance_variable_get(:@board)
+        board[3][4] = 1
+        expect(game).not_to be_position_valid
+      end
+    end
+  end
 end
 
