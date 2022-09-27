@@ -2,13 +2,13 @@
 
 # this class represents the whole game
 class Game
-  def initialize
+  def initialize # you can check if ::new is called on Knight
     @board = Array.new(8) { Array.new(8, 0) }
     @knight = Knight.new
     @nodes_queue = []
   end
 
-  def start
+  def start # outgoing command script method, stub every thing and check that @knight receives
     @current_position = user_input('start')
     @finish_position = user_input('finish')
 
@@ -16,17 +16,17 @@ class Game
     play_game
   end
 
-  def user_input(time)
+  def user_input(time) # looping script method, check how the loop behaves with different inputs
     puts "Enter the #{time} position (a,b) of the knight.\nA coordinate must be a number between 0 and 7. "
     loop do
       input = gets.chomp.split(',')
-      return input.map(&:to_i) if input_valid?(input)
+      return input.map(&:to_i) if valid_input?(input)
 
       puts 'Invalid position, try again!'
     end
   end
 
-  def input_valid?(input)
+  def valid_input?(input)
     input.length == 2 && ('0'..'7').member?(input[0]) && ('0'..'7').member?(input[1])
   end
 
@@ -36,14 +36,14 @@ class Game
     print_path(@nodes_queue[-1])
   end
 
-  def create_positions_tree
-    @nodes_queue << @knight.root
+  def create_positions_tree # check the outgoing command the the conditional branch
+    @nodes_queue << @knight.root #check that this message is sent
     @board[@current_position[0]][@current_position[1]] = 1
 
-    add_nodes_to_tree if @current_position != @finish_position
+    add_nodes_to_tree if @current_position != @finish_position # check if the method is called or not
   end
 
-  def add_nodes_to_tree
+  def add_nodes_to_tree # looping script method, check how this loop behaves
     loop do
       node = @nodes_queue.shift
       add_children_to_node(node)
