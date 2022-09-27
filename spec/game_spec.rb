@@ -299,7 +299,7 @@ describe Game do
     end
     context 'when position is valid' do
       it 'adds the current node as child in the tree' do
-        allow(game).to receive(:position_valid?).and_return(true)
+        allow(game).to receive(:valid_position?).and_return(true)
         expect(game).to receive(:add_child)
         child_number = 0
         game.manage_child(node, child_number)
@@ -308,7 +308,7 @@ describe Game do
 
     context 'when position is invalid' do
       it 'does not add the current node as child in the tree' do
-        allow(game).to receive(:position_valid?).and_return(false)
+        allow(game).to receive(:valid_position?).and_return(false)
         expect(game).not_to receive(:add_child)
         child_number = 1
         game.manage_child(node, child_number)
@@ -338,7 +338,7 @@ describe Game do
     end
   end
 
-  describe '#position_valid?' do
+  describe '#valid_position?' do
     let(:board) { game.instance_variable_get(:@board) }
 
     context 'when given a valid cell and it is not already occupied' do
@@ -346,14 +346,14 @@ describe Game do
       game.instance_variable_set(:@current_position, [1, 2])
       board = game.instance_variable_get(:@board)
       board[1][2] = 0
-      expect(game).to be_position_valid
+      expect(game).to be_valid_position
       end
     end
 
     context 'when given an invalid cell' do
       it 'is not a valid position' do
         game.instance_variable_set(:@current_position, [-1, 2])
-        expect(game).not_to be_position_valid
+        expect(game).not_to be_valid_position
       end
     end
 
@@ -362,7 +362,7 @@ describe Game do
         game.instance_variable_set(:@current_position, [3, 4])
         board = game.instance_variable_get(:@board)
         board[3][4] = 1
-        expect(game).not_to be_position_valid
+        expect(game).not_to be_valid_position
       end
     end
   end

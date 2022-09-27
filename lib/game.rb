@@ -71,7 +71,7 @@ class Game
 
   def manage_child(node, child_number)
     calculate_current_position(node, child_number)
-    add_child(node) if position_valid?
+    add_child(node) if valid_position?
   end
 
   def calculate_current_position(node, child)
@@ -80,7 +80,7 @@ class Game
     @current_position[1] = node.position[1] + @knight.possible_moves[child][1]
   end
 
-  def position_valid?
+  def valid_position?
     (0..7).member?(@current_position[0]) && (0..7).member?(@current_position[1]) &&
       @board[@current_position[0]][@current_position[1]].zero?
   end
