@@ -56,8 +56,8 @@ class Game
     while child_number < 8
       calculate_current_position(node, child_number)
       add_child(node) if position_valid?
-
       break if @current_position == @finish_position
+
       child_number += 1
     end
   end
@@ -87,7 +87,7 @@ class Game
       print_node(node)
       return
     end
-    print_path(node.parent, moves += 1)
+    print_path(node.parent, moves + 1)
     print_node(node)
   end
 
