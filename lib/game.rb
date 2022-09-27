@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require 'pry-byebug'
+
 # this class represents the whole game
 class Game
   def initialize
@@ -8,7 +8,7 @@ class Game
     @nodes_queue = []
   end
 
-  def start_game
+  def start
     @current_position = user_input('start')
     @finish_position = user_input('finish')
 
