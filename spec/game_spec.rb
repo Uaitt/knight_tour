@@ -172,4 +172,48 @@ describe Game do
       end
     end
   end
+
+  describe '#create_position_tree' do
+    let(:knight) { game.instance_variable_get(:@knight) }
+    before do
+      allow(game).to receive(:add_nodes_to_tree)
+      allow(knight).to receive(:root)
+    end
+
+    context 'when called' do
+      before do
+        game.instance_variable_set(:@current_position, [0, 0])
+        game.instance_variable_set(:@finish_position, [2, 3])
+      end
+
+      it 'calls #root on an object of Knight class' do
+        expect(knight).to receive(:root)
+        game.create_positions_tree
+      end
+    end
+
+    context 'when @current_position and @finish_position are equal' do
+      before do
+        game.instance_variable_set(:@current_position, [0, 0])
+        game.instance_variable_set(:@finish_position, [0, 0])
+      end
+
+      it 'does not create the tree' do
+        expect(game).not_to receive(:add_nodes_to_tree)
+        game.create_positions_tree
+      end
+    end
+
+    context 'when @current_position and @finish_position are not equal' do
+      before do
+        game.instance_variable_set(:@current_position, [0, 0])
+        game.instance_variable_set(:@finish_position, [2, 3])
+      end
+
+      it 'does create the tree' do
+        expect(game).to receive(:add_nodes_to_tree).once
+        game.create_positions_tree
+      end
+    end
+  end
 end
