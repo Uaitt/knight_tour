@@ -46,7 +46,7 @@ describe Game do
       context 'when user enters a valid input the first time' do
         before do
           allow(game).to receive(:gets).and_return('0,0', '0,0')
-          allow(game).to receive(:input_valid?).with(['0', '0']).and_return(true, true)
+          allow(game).to receive(:valid_input?).with(['0', '0']).and_return(true, true)
         end
 
         it 'exits the loop at the first iteration' do
@@ -63,7 +63,7 @@ describe Game do
       context 'when user enters an invalid input and then a valid input' do
         before do
           allow(game).to receive(:gets).and_return('a,2', '0,0')
-          allow(game).to receive(:input_valid?).and_return(false, true)
+          allow(game).to receive(:valid_input?).and_return(false, true)
         end
 
         it 'exits the loop at the second iteration' do
@@ -91,6 +91,83 @@ describe Game do
         it 'returns an array of integers' do
           return_value = game.user_input(time)
           expect(return_value).to eq([1,1])
+        end
+      end
+    end
+  end
+
+  describe '#input_valid?' do
+    context 'when given two numbers digits' do
+      it 'is valid' do
+        input = %w[0 0]
+        expect(game).to be_valid_input(input)
+      end
+
+      it 'is valid' do
+        input = %w[7 7]
+        expect(game).to be_valid_input(input)
+      end
+
+      it 'is valid' do
+        input = %w[3 2]
+        expect(game).to be_valid_input(input)
+      end
+    end
+
+    context 'when given an invalid input' do
+      context 'when given letters' do
+        it 'is not valid input' do
+          input = ['a', '2']
+          expect(game).not_to be_valid_input(input)
+        end
+
+        it 'is not valid input' do
+          input = ['a', 'b']
+          expect(game).not_to be_valid_input(input)
+        end
+      end
+
+      context 'when given invalid numbers' do
+        context 'when given negative numbers' do
+          it 'is not valid input' do
+            input = %w[-2 1]
+            expect(game).not_to be_valid_input(input)
+          end
+        end
+
+        context 'when given out of range numbers' do
+          it 'is not valid input' do
+            input = %w[0 9]
+            expect(game).not_to be_valid_input(input)
+          end
+
+          it 'is not valid input' do
+            input = %w[9 10]
+            expect(game).not_to be_valid_input(input)
+          end
+        end
+      end
+
+      context 'when given more than two digits' do
+        context 'when they are numbers' do
+          it 'is not valid input' do
+            input = %w[1 2 3]
+            expect(game).not_to be_valid_input(input)
+          end
+        end
+
+        context 'when they are letters' do
+          it 'is not valid input' do
+            input = %w[a b c]
+            expect(game).not_to be_valid_input(input)
+          end
+        end
+      end
+
+      context 'when given nothing' do
+        it 'is not valid input' do
+          input = []
+          expect(game).not_to be_valid_input(input)
         end
       end
     end
