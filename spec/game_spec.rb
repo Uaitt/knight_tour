@@ -23,7 +23,7 @@ describe Game do
     let(:knight) { game.instance_variable_get(:@knight)}
     before do
       allow(game).to receive(:user_input).and_return([0, 0], [1, 2])
-      allow(game).to receive(:play_game)
+      allow(game).to receive(:play)
     end
 
     context 'when called' do
@@ -256,6 +256,37 @@ describe Game do
       it 'stops the loop at the second iteration' do
         expect(game).to receive(:add_children_to_node).exactly(3).times
         game.add_nodes_to_tree
+      end
+    end
+  end
+
+  describe '#add_children_to_node' do
+    let(:node) { double(TreeNode) }
+    before do
+      allow(game).to receive(:manage_child)
+    end
+
+    context 'when first child represents the finish position' do
+      it 'exits the loop on the first iteration' do
+        allow(game).to receive(:finished_path?).and_return(true)
+        expect(game).to receive(:manage_child).once
+        game.add_children_to_node(node)
+      end
+    end
+
+    context 'when second child represents the finish position' do
+      it 'exits the loop on the second iteration' do
+        allow(game).to receive(:finished_path?).and_return(false, true)
+        expect(game).to receive(:manage_child).twice
+        game.add_children_to_node(node)
+      end
+    end
+
+    context 'when fourth child represents the finish position' do
+      it 'exits the loop on the fourth iteration' do
+        allow(game).to receive(:finished_path?).and_return(false, false, false, true)
+        expect(game).to receive(:manage_child).exactly(4).times
+        game.add_children_to_node(node)
       end
     end
   end
