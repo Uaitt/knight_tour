@@ -217,5 +217,47 @@ describe Game do
     end
   end
 
+  describe '#add_nodes_to_tree' do
+    let(:nodes_queue) { game.instance_variable_get(:@nodes_queue) }
+    before do
+      node = double(TreeNode)
+      allow(node).to receive(:position)
+      allow(nodes_queue).to receive(:shift)
+      allow(game).to receive(:add_children_to_node)
+      allow(nodes_queue).to receive(:[]).and_return(node)
+    end
+    context 'when a root child represents the finished position' do
+      before do
+        allow(game).to receive(:finished_path?).and_return(true)
+      end
 
-  describe '#add_nodes_to_tree' do 
+      it 'stops the loop at the first iteration' do
+        expect(game).to receive(:add_children_to_node).once
+        game.add_nodes_to_tree
+      end
+    end
+
+    context 'when a root grandchild represents the finished position' do
+      before do
+        allow(game).to receive(:finished_path?).and_return(false, true)
+      end
+
+      it 'stops the loop at the second iteration' do
+        expect(game).to receive(:add_children_to_node).twice
+        game.add_nodes_to_tree
+      end
+    end
+
+    context 'when a root great grandchild represents the finished position' do
+      before do
+        allow(game).to receive(:finished_path?).and_return(false, false, true)
+      end
+
+      it 'stops the loop at the second iteration' do
+        expect(game).to receive(:add_children_to_node).exactly(3).times
+        game.add_nodes_to_tree
+      end
+    end
+  end
+end
+
