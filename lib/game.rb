@@ -37,29 +37,41 @@ class Game
   end
 
   def create_positions_tree # check the outgoing command the the conditional branch
-    @nodes_queue << @knight.root #check that this message is sent
-    @board[@current_position[0]][@current_position[1]] = 1
+    add_child_to_queue(@knight.root)
 
     add_nodes_to_tree if @current_position != @finish_position # check if the method is called or not
+  end
+
+  def add_child_to_queue(new_node)
+    @nodes_queue << new_node
+    @board[@current_position[0]][@current_position[1]] = 1
   end
 
   def add_nodes_to_tree # looping script method, check how this loop behaves
     loop do
       node = @nodes_queue.shift
       add_children_to_node(node)
-      break if @nodes_queue[-1].position == @finish_position
+      break if finished_path?(@nodes_queue[-1].position, @finish_position)
     end
   end
 
   def add_children_to_node(node) # looping script method, test the behavior (when it breaks)
     child_number = 0
     while child_number < 8
-      calculate_current_position(node, child_number)
-      add_child(node) if position_valid?
-      break if @current_position == @finish_position
+      manage_child(node, child_number)
+      break if finished_path?(@current_position, @finish_position)
 
       child_number += 1
     end
+  end
+
+  def finished_path?(current_position, finish_position)
+    current_position == finish_position
+  end
+
+  def manage_child(node, child_number)
+    calculate_current_position(node, child_number)
+    add_child(node) if position_valid?
   end
 
   def calculate_current_position(node, child)
@@ -74,11 +86,15 @@ class Game
   end
 
   def add_child(node)
+    new_node = create_child(node)
+
+    add_child_to_queue(new_node)
+  end
+
+  def create_child(node)
     new_node = TreeNode.new([@current_position[0], @current_position[1]], node)
     node.next_nodes << new_node
-
-    @nodes_queue << new_node
-    @board[@current_position[0]][@current_position[1]] = 1
+    new_node
   end
 
   def print_path(node, moves = 0)
