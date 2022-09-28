@@ -379,5 +379,42 @@ describe Game do
     end
   end
 
-end
+  describe '#print_path' do
+    let(:root_node) { double(TreeNode, parent: nil) }
+    context 'when finish node has only one parent' do
+      let(:node) { double(TreeNode, parent: root_node) }
+      it 'prints two nodes' do
+        allow(game).to receive(:puts)
+        allow(game).to receive(:print_node)
+        expect(game).to receive(:print_node).twice
+        game.print_path(node)
+      end
 
+      it 'prints nodes in the right order' do
+        allow(game).to receive(:print_node)
+        expect(game).to receive(:print_node).with(root_node).ordered
+        expect(game).to receive(:print_node).with(node).ordered
+        game.print_path(node)
+      end
+    end
+
+    context 'when finish node has a parent and a grand parent' do
+      let(:parent_node) { double(TreeNode, parent: root_node) }
+      let(:node) { double(TreeNode, parent: parent_node) }
+      it 'prints three nodes' do
+        allow(game).to receive(:puts)
+        allow(game).to receive(:print_node)
+        expect(game).to receive(:print_node).exactly(3).times
+        game.print_path(node)
+      end
+
+      it 'prints nodes in the right order' do
+        allow(game).to receive(:print_node)
+        expect(game).to receive(:print_node).with(root_node).ordered
+        expect(game).to receive(:print_node).with(parent_node).ordered
+        expect(game).to receive(:print_node).with(node).ordered
+        game.print_path(node)
+      end
+    end
+  end
+end
