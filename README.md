@@ -14,7 +14,7 @@ The knight's tour problem is the mathematical problem of finding a knight's tour
    * rspec-mocks 3.11.1
    * rspec-support 3.11.1
 
-## Setup
+## Usage
 To run this project, first clone this repository locally on your local machine.
 
 ```
