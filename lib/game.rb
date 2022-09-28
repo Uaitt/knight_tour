@@ -26,20 +26,30 @@ class Game
     end
   end
 
-  def valid_input?(input)
-    input.length == 2 && ('0'..'7').member?(input[0]) && ('0'..'7').member?(input[1])
-  end
-
   def play
     create_positions_tree
 
     print_path(@nodes_queue[-1])
   end
 
+  def valid_input?(input)
+    input.length == 2 && ('0'..'7').member?(input[0]) && ('0'..'7').member?(input[1])
+  end
+
   def create_positions_tree
     add_child_to_queue(@knight.root)
 
     add_nodes_to_tree if @current_position != @finish_position
+  end
+
+  def print_path(node, moves = 0)
+    if node.parent.nil?
+      puts "You made it in #{moves} move#{'s' if moves > 1}! Here's your path: "
+      print_node(node)
+      return
+    end
+    print_path(node.parent, moves + 1)
+    print_node(node)
   end
 
   def add_child_to_queue(new_node)
@@ -54,6 +64,11 @@ class Game
       last_position = last_position_in_queue
       break if finished_path?(last_position, @finish_position)
     end
+  end
+
+  def print_node(node)
+    p node.position
+    puts ''
   end
 
   def add_children_to_node(node)
@@ -100,20 +115,5 @@ class Game
     new_node = TreeNode.new([@current_position[0], @current_position[1]], node)
     node.next_nodes << new_node
     new_node
-  end
-
-  def print_path(node, moves = 0)
-    if node.parent.nil?
-      puts "You made it in #{moves} move#{'s' if moves > 1}! Here's your path: "
-      print_node(node)
-      return
-    end
-    print_path(node.parent, moves + 1)
-    print_node(node)
-  end
-
-  def print_node(node)
-    p node.position
-    puts ''
   end
 end
