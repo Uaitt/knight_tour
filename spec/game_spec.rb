@@ -8,7 +8,7 @@ describe Game do
 
   describe '#initialize' do
     context 'when called' do
-      it 'calls ::new on Knight' do
+      it 'send the ::new on the Knight class' do
         expect(Knight).to receive(:new)
         described_class.new
       end
