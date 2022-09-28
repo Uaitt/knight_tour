@@ -208,42 +208,32 @@ describe Game do
   end
 
   describe '#add_nodes_to_tree' do
-    let(:nodes_queue) { game.instance_variable_get(:@nodes_queue) }
+    let(:nodes_queue) { game.instance_variable_set(:@nodes_queue, []) }
     before do
       node = double(TreeNode)
       allow(node).to receive(:position)
-      allow(nodes_queue).to receive(:shift)
       allow(game).to receive(:add_children_to_node)
       allow(nodes_queue).to receive(:[]).and_return(node)
     end
     context 'when a root child represents the finished position' do
-      before do
-        allow(game).to receive(:finished_path?).and_return(true)
-      end
-
       it 'stops the loop at the first iteration' do
+        allow(game).to receive(:finished_path?).and_return(true)
         expect(game).to receive(:add_children_to_node).once
         game.add_nodes_to_tree
       end
     end
 
     context 'when a root grandchild represents the finished position' do
-      before do
-        allow(game).to receive(:finished_path?).and_return(false, true)
-      end
-
       it 'stops the loop at the second iteration' do
+        allow(game).to receive(:finished_path?).and_return(false, true)
         expect(game).to receive(:add_children_to_node).twice
         game.add_nodes_to_tree
       end
     end
 
     context 'when a root great grandchild represents the finished position' do
-      before do
-        allow(game).to receive(:finished_path?).and_return(false, false, true)
-      end
-
       it 'stops the loop at the second iteration' do
+        allow(game).to receive(:finished_path?).and_return(false, false, true)
         expect(game).to receive(:add_children_to_node).exactly(3).times
         game.add_nodes_to_tree
       end
@@ -309,14 +299,14 @@ describe Game do
   describe '#calculate_current_position' do
     let(:node) { double(TreeNode) }
     let(:knight) { game.instance_variable_get(:@knight) }
-    let(:child) { 1 }
+    let(:child) { 0 }
     before do
       allow(node).to receive(:position).and_return([0, 0])
-      allow(knight).to receive(:possible_moves).and_return([1, 2])
+      allow(knight).to receive(:possible_moves).and_return([[1, 2], [-1, 2]])
     end
 
     context 'when called' do
-      it 'sends the position message on a node' do
+      it 'sends the position message on a tree node' do
         expect(node).to receive(:position).twice
         game.calculate_current_position(node, child)
       end
@@ -324,6 +314,13 @@ describe Game do
       it 'sends the possible_moves message on a knight' do
         expect(knight).to receive(:possible_moves).twice
         game.calculate_current_position(node, child)
+      end
+
+      it 'assigns the correct values to the instance variable' do
+        game.calculate_current_position(node, child)
+        current_position = game.instance_variable_get(:@current_position)
+        expected_position = [1, 2]
+        expect(current_position).to eq(expected_position)
       end
     end
   end
