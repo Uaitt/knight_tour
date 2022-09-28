@@ -330,14 +330,14 @@ describe Game do
 
     context 'when given a valid cell and it is not already occupied' do
       it 'is a valid position' do
-      game.instance_variable_set(:@current_position, [1, 2])
-      board = game.instance_variable_get(:@board)
-      board[1][2] = 0
-      expect(game).to be_valid_position
+        game.instance_variable_set(:@current_position, [1, 2])
+        board = game.instance_variable_get(:@board)
+        board[1][2] = 0
+        expect(game).to be_valid_position
       end
     end
 
-    context 'when given an invalid cell' do
+    context 'when given an out of range cell' do
       it 'is not a valid position' do
         game.instance_variable_set(:@current_position, [-1, 2])
         expect(game).not_to be_valid_position
