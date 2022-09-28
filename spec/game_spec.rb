@@ -210,11 +210,10 @@ describe Game do
   describe '#add_nodes_to_tree' do
     let(:nodes_queue) { game.instance_variable_set(:@nodes_queue, []) }
     before do
-      node = double(TreeNode)
-      allow(node).to receive(:position)
       allow(game).to receive(:add_children_to_node)
-      allow(nodes_queue).to receive(:[]).and_return(node)
+      allow(game).to receive(:last_position_in_queue)
     end
+
     context 'when a root child represents the finished position' do
       it 'stops the loop at the first iteration' do
         allow(game).to receive(:finished_path?).and_return(true)
