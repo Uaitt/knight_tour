@@ -5,10 +5,6 @@ require_relative '../lib/tree_node'
 
 describe Game do
   subject(:game) { described_class.new }
-  before do
-    allow(Knight).to receive(:new)
-    game.instance_variable_set(:@knight, double(Knight))
-  end
 
   describe '#initialize' do
     context 'when called' do
@@ -20,7 +16,7 @@ describe Game do
   end
 
   describe '#start' do
-    let(:knight) { game.instance_variable_get(:@knight)}
+    let(:knight) { game.instance_variable_get(:@knight) }
     before do
       allow(game).to receive(:user_input).and_return([0, 0], [1, 2])
       allow(game).to receive(:play)
@@ -36,67 +32,65 @@ describe Game do
   end
 
   describe '#user_input' do
-    context 'when asking for the starting position' do
-      let(:time) { 'start' }
+    let(:time) { 'start' }
+    before do
+      allow(game).to receive(:puts)
+      allow(game).to receive(:puts).with('Invalid position, try again!')
+    end
+
+    context 'when user enters a valid input the first time' do
       before do
-        allow(game).to receive(:puts)
+        allow(game).to receive(:gets).and_return('0,0', '0,0')
+        allow(game).to receive(:valid_input?).with(%w[0 0]).and_return(true, true)
+      end
+
+      it 'exits the loop at the first iteration' do
+        expect(game).to receive(:puts).once
+        game.user_input(time)
+      end
+
+      it 'returns an array of integers' do
+        return_value = game.user_input(time)
+        expect(return_value).to eq([0, 0])
+      end
+    end
+
+    context 'when user enters an invalid input and then a valid input' do
+      before do
+        allow(game).to receive(:gets).and_return('a,2', '0,0')
+        allow(game).to receive(:valid_input?).and_return(false, true)
+      end
+
+      it 'exits the loop at the second iteration' do
+        expect(game).to receive(:puts).with('Invalid position, try again!').once
+        game.user_input(time)
+      end
+
+      it 'returns an array of integers' do
+        return_value = game.user_input(time)
+        expect(return_value).to eq([0, 0])
+      end
+    end
+
+    context 'when user enters an invalid input twice and then a valid input' do
+      before do
+        allow(game).to receive(:gets).and_return('a,2', '-1,2', '1,1')
         allow(game).to receive(:puts).with('Invalid position, try again!')
       end
 
-      context 'when user enters a valid input the first time' do
-        before do
-          allow(game).to receive(:gets).and_return('0,0', '0,0')
-          allow(game).to receive(:valid_input?).with(['0', '0']).and_return(true, true)
-        end
-
-        it 'exits the loop at the first iteration' do
-          expect(game).to receive(:puts).once
-          game.user_input(time)
-        end
-
-        it 'returns an array of integers' do
-          return_value = game.user_input(time)
-          expect(return_value).to eq([0, 0])
-        end
+      it 'exits the loop at the third iteration' do
+        expect(game).to receive(:puts).with('Invalid position, try again!').twice
+        game.user_input(time)
       end
 
-      context 'when user enters an invalid input and then a valid input' do
-        before do
-          allow(game).to receive(:gets).and_return('a,2', '0,0')
-          allow(game).to receive(:valid_input?).and_return(false, true)
-        end
-
-        it 'exits the loop at the second iteration' do
-          expect(game).to receive(:puts).with('Invalid position, try again!').once
-          game.user_input(time)
-        end
-
-        it 'returns an array of integers' do
-          return_value = game.user_input(time)
-          expect(return_value).to eq([0,0])
-        end
-      end
-
-      context 'when user enters an invalid input twice and then a valid input' do
-        before do
-          allow(game).to receive(:gets).and_return('a,2', '-1,2', '1,1')
-          allow(game).to receive(:puts).with('Invalid position, try again!')
-        end
-
-        it 'exits the loop at the third iteration' do
-          expect(game).to receive(:puts).with('Invalid position, try again!').twice
-          game.user_input(time)
-        end
-
-        it 'returns an array of integers' do
-          return_value = game.user_input(time)
-          expect(return_value).to eq([1,1])
-        end
+      it 'returns an array of integers' do
+        return_value = game.user_input(time)
+        expect(return_value).to eq([1, 1])
       end
     end
   end
 
-  describe '#input_valid?' do
+  describe '#valid_input?' do
     context 'when given two numbers digits' do
       it 'is valid' do
         input = %w[0 0]
@@ -114,61 +108,57 @@ describe Game do
       end
     end
 
-    context 'when given an invalid input' do
-      context 'when given letters' do
-        it 'is not valid input' do
-          input = ['a', '2']
-          expect(game).not_to be_valid_input(input)
-        end
+    context 'when given letters' do
+      it 'is not valid input' do
+        input = %w[a 2]
+        expect(game).not_to be_valid_input(input)
+      end
 
+      it 'is not valid input' do
+        input = %w[a b]
+        expect(game).not_to be_valid_input(input)
+      end
+    end
+
+    context 'when given negative numbers' do
+      it 'is not valid input' do
+        input = %w[-2 1]
+        expect(game).not_to be_valid_input(input)
+      end
+    end
+
+    context 'when given out of range numbers' do
+      it 'is not valid input' do
+        input = %w[0 9]
+        expect(game).not_to be_valid_input(input)
+      end
+
+      it 'is not valid input' do
+        input = %w[9 10]
+        expect(game).not_to be_valid_input(input)
+      end
+    end
+
+    context 'when given more than two digits' do
+      context 'when they are numbers' do
         it 'is not valid input' do
-          input = ['a', 'b']
+          input = %w[1 2 3]
           expect(game).not_to be_valid_input(input)
         end
       end
 
-      context 'when given invalid numbers' do
-        context 'when given negative numbers' do
-          it 'is not valid input' do
-            input = %w[-2 1]
-            expect(game).not_to be_valid_input(input)
-          end
-        end
-
-        context 'when given out of range numbers' do
-          it 'is not valid input' do
-            input = %w[0 9]
-            expect(game).not_to be_valid_input(input)
-          end
-
-          it 'is not valid input' do
-            input = %w[9 10]
-            expect(game).not_to be_valid_input(input)
-          end
-        end
-      end
-
-      context 'when given more than two digits' do
-        context 'when they are numbers' do
-          it 'is not valid input' do
-            input = %w[1 2 3]
-            expect(game).not_to be_valid_input(input)
-          end
-        end
-
-        context 'when they are letters' do
-          it 'is not valid input' do
-            input = %w[a b c]
-            expect(game).not_to be_valid_input(input)
-          end
-        end
-      end
-
-      context 'when given nothing' do
+      context 'when they are letters' do
         it 'is not valid input' do
-          input = []
+          input = %w[a b c]
           expect(game).not_to be_valid_input(input)
         end
+      end
+    end
+
+    context 'when given nothing' do
+      it 'is not valid input' do
+        input = []
+        expect(game).not_to be_valid_input(input)
       end
     end
   end
@@ -192,7 +182,7 @@ describe Game do
       end
     end
 
-    context 'when @current_position and @finish_position are equal' do
+    context 'when the current position is equal to the finish position' do
       before do
         game.instance_variable_set(:@current_position, [0, 0])
         game.instance_variable_set(:@finish_position, [0, 0])
@@ -204,7 +194,7 @@ describe Game do
       end
     end
 
-    context 'when @current_position and @finish_position are not equal' do
+    context 'when the current position is not equal to the finish position' do
       before do
         game.instance_variable_set(:@current_position, [0, 0])
         game.instance_variable_set(:@finish_position, [2, 3])
