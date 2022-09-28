@@ -207,6 +207,45 @@ describe Game do
     end
   end
 
+  describe '#print_path' do
+    let(:root_node) { double(TreeNode, parent: nil) }
+    context 'when finish node has only one parent' do
+      let(:node) { double(TreeNode, parent: root_node) }
+      it 'prints two nodes' do
+        allow(game).to receive(:puts)
+        allow(game).to receive(:print_node)
+        expect(game).to receive(:print_node).twice
+        game.print_path(node)
+      end
+
+      it 'prints nodes in the right order' do
+        allow(game).to receive(:print_node)
+        expect(game).to receive(:print_node).with(root_node).ordered
+        expect(game).to receive(:print_node).with(node).ordered
+        game.print_path(node)
+      end
+    end
+
+    context 'when finish node has a parent and a grand parent' do
+      let(:parent_node) { double(TreeNode, parent: root_node) }
+      let(:node) { double(TreeNode, parent: parent_node) }
+      it 'prints three nodes' do
+        allow(game).to receive(:puts)
+        allow(game).to receive(:print_node)
+        expect(game).to receive(:print_node).exactly(3).times
+        game.print_path(node)
+      end
+
+      it 'prints nodes in the right order' do
+        allow(game).to receive(:print_node)
+        expect(game).to receive(:print_node).with(root_node).ordered
+        expect(game).to receive(:print_node).with(parent_node).ordered
+        expect(game).to receive(:print_node).with(node).ordered
+        game.print_path(node)
+      end
+    end
+  end
+
   describe '#add_nodes_to_tree' do
     let(:nodes_queue) { game.instance_variable_set(:@nodes_queue, []) }
     before do
@@ -266,6 +305,19 @@ describe Game do
         allow(game).to receive(:finished_path?).and_return(false, false, false, true)
         expect(game).to receive(:manage_child).exactly(4).times
         game.add_children_to_node(node)
+      end
+    end
+  end
+
+  describe '#last_position_in_queue' do
+    let(:nodes_queue) { game.instance_variable_get(:@nodes_queue) }
+    let(:node) { double(TreeNode) }
+    context 'when called' do
+      it 'sends the position message to a node' do
+        allow(nodes_queue).to receive(:[]).and_return(node)
+        allow(node).to receive(:position)
+        expect(node).to receive(:position)
+        game.last_position_in_queue
       end
     end
   end
@@ -361,45 +413,6 @@ describe Game do
         game.instance_variable_set(:@current_position, [0, 0])
         expect(node).to receive(:next_nodes).once
         game.create_child(node)
-      end
-    end
-  end
-
-  describe '#print_path' do
-    let(:root_node) { double(TreeNode, parent: nil) }
-    context 'when finish node has only one parent' do
-      let(:node) { double(TreeNode, parent: root_node) }
-      it 'prints two nodes' do
-        allow(game).to receive(:puts)
-        allow(game).to receive(:print_node)
-        expect(game).to receive(:print_node).twice
-        game.print_path(node)
-      end
-
-      it 'prints nodes in the right order' do
-        allow(game).to receive(:print_node)
-        expect(game).to receive(:print_node).with(root_node).ordered
-        expect(game).to receive(:print_node).with(node).ordered
-        game.print_path(node)
-      end
-    end
-
-    context 'when finish node has a parent and a grand parent' do
-      let(:parent_node) { double(TreeNode, parent: root_node) }
-      let(:node) { double(TreeNode, parent: parent_node) }
-      it 'prints three nodes' do
-        allow(game).to receive(:puts)
-        allow(game).to receive(:print_node)
-        expect(game).to receive(:print_node).exactly(3).times
-        game.print_path(node)
-      end
-
-      it 'prints nodes in the right order' do
-        allow(game).to receive(:print_node)
-        expect(game).to receive(:print_node).with(root_node).ordered
-        expect(game).to receive(:print_node).with(parent_node).ordered
-        expect(game).to receive(:print_node).with(node).ordered
-        game.print_path(node)
       end
     end
   end
