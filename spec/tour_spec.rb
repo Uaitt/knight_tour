@@ -20,7 +20,7 @@ describe Tour do
     let(:knight) { game.instance_variable_get(:@knight) }
     before do
       allow(game).to receive(:user_input).and_return([0, 0], [1, 2])
-      allow(game).to receive(:play)
+      allow(game).to receive(:travel_path)
     end
 
     context 'when called' do

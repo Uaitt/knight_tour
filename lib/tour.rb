@@ -13,7 +13,7 @@ class Tour
     @finish_position = user_input('finish')
 
     @knight.create_tree_root(@current_position)
-    play
+    travel_path
   end
 
   def user_input(time)
@@ -26,7 +26,7 @@ class Tour
     end
   end
 
-  def play
+  def travel_path
     create_positions_tree
 
     print_path(@nodes_queue[-1])
