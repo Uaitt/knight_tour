@@ -51,7 +51,8 @@ class Game
     loop do
       node = @nodes_queue.shift
       add_children_to_node(node)
-      break if finished_path?(@nodes_queue[-1].position, @finish_position)
+      last_position = last_position_in_queue
+      break if finished_path?(last_position, @finish_position)
     end
   end
 
@@ -63,6 +64,10 @@ class Game
 
       child_number += 1
     end
+  end
+
+  def last_position_in_queue
+    @nodes_queue[-1].position
   end
 
   def finished_path?(current_position, finish_position)
