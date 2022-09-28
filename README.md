@@ -18,15 +18,21 @@ The knight's tour problem is the mathematical problem of finding a knight's tour
 To run this project, first clone this repository locally on your local machine.
 
 ```
-cd knight_turn
-
-# to launch the application
-ruby lib/main.rb
-
-# to launch the tests
-rspec spec/
+$ cd knight_turn
 ```
 
+To launch the application execute:
+```
+$ ruby lib/main.rb
+```
 
+To launch the whole test suite execute:
+```
+$ rspec spec/
+```
 
+Or if you want to launch the tests for just one class, run:
+```
+$ rspec spec/class_spec.rb
+```
 
