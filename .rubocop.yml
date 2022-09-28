@@ -1,0 +1,3 @@
+BlockLength:
+  Exclude:
+    - './spec/game_spec.rb'
