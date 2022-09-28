@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-# this class represents the whole game
-class Game
+# this class represents the tour
+class Tour
   def initialize
     @board = Array.new(8) { Array.new(8, 0) }
     @knight = Knight.new

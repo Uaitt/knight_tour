@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require_relative 'game'
+require_relative 'tour'
 require_relative 'knight'
 require_relative 'tree_node'
 
-Game.new.start
+Tour.new.start

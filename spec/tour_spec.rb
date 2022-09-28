@@ -1,9 +1,10 @@
 # frozen_string_literal: true
-require_relative '../lib/game'
+
+require_relative '../lib/tour'
 require_relative '../lib/knight'
 require_relative '../lib/tree_node'
 
-describe Game do
+describe Tour do
   subject(:game) { described_class.new }
 
   describe '#initialize' do

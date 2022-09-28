@@ -1,3 +1,3 @@
 BlockLength:
   Exclude:
-    - './spec/game_spec.rb'
+    - './spec/tour_spec.rb'
