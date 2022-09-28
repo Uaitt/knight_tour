@@ -366,5 +366,18 @@ describe Game do
       end
     end
   end
+
+  describe '#create_child' do
+    context 'when called' do
+      let(:node) { double(TreeNode, next_nodes: []) }
+      it 'sends the message next_nodes to a node object' do
+        allow(TreeNode).to receive(:new)
+        game.instance_variable_set(:@current_position, [0, 0])
+        expect(node).to receive(:next_nodes).once
+        game.create_child(node)
+      end
+    end
+  end
+
 end
 
