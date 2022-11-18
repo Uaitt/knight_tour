@@ -28,7 +28,7 @@ You can launch the whole test suite
 $ rspec spec/
 ```
 
-Or launch the test only for one class
+Or launch the tests only for one class
 ```
 $ rspec spec/class_spec.rb
 ```
